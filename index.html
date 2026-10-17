@@ -1,0 +1,383 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>免流(Jscloud) 服务架构与流量配置指南</title><meta name="description" content="免流(Jscloud) 为您提供清晰明了的流量调度与多设备连接方案。本文档通过问答引导形式，解析基础套餐规格、各端通用接入步骤以及日常维护指引。"><meta name="keywords" content="免流, Jscloud, 流量配额, 多端网络配置, 订阅指南, 节点服务"><meta name="robots" content="index,follow"><link rel="canonical" href="https://p-7d695ccde5.ujpjkvw.cn/"><meta property="og:type" content="website"><meta property="og:title" content="免流(Jscloud) 服务架构与流量配置指南"><meta property="og:description" content="免流(Jscloud) 为您提供清晰明了的流量调度与多设备连接方案。本文档通过问答引导形式，解析基础套餐规格、各端通用接入步骤以及日常维护指引。"><meta property="og:url" content="https://p-7d695ccde5.ujpjkvw.cn/"><meta property="og:site_name" content="免流(Jscloud)"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "url": "https://p-7d695ccde5.ujpjkvw.cn/", "name": "免流(Jscloud) 服务架构与流量配置指南", "description": "免流(Jscloud) 为您提供清晰明了的流量调度与多设备连接方案。本文档通过问答引导形式，解析基础套餐规格、各端通用接入步骤以及日常维护指引。", "inLanguage": "zh-CN"}</script><meta name="publisher-task" content="9d62e439326971a1cc83242b:015697341ceebe95b42b92926ad2a22bac8438d03450d7f43fce8cdfdeb8b9bc:27ea343f0d0d5775c5b7"></head><body id="top"><style>
+    * {box-sizing: border-box;margin: 0;padding: 0}
+    body {background-color: #fbf9f5;color: #271a14;font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Serif SC", serif, sans-serif;line-height: 1.7;letter-spacing: 0.01em}
+    a {color: inherit;text-decoration: none}
+
+    /* 顶部面包屑与目录导航 */
+    .site-nav-wrapper {background-color: #f2ece4;border-bottom: 1px solid #e2d7ca;padding: 14px 24px;font-size: 0.88rem}
+    .site-nav-inner {max-width: 1140px;margin: 0 auto;display: flex;flex-wrap: wrap;justify-content: space-between;align-items: center;gap: 12px}
+    .breadcrumbs {color: #6e584d;display: flex;align-items: center;gap: 8px}
+    .breadcrumbs span.current {color: #1a100b;font-weight: 600}
+    .dir-index {display: flex;gap: 18px;list-style: none}
+    .dir-index a {color: #4a382f;padding: 3px 6px;border-bottom: 1px solid transparent;transition: all 0.2s ease}
+    .dir-index a:hover {color: #0b8457;border-bottom-color: #2dd4bf}
+
+    main {max-width: 1140px;margin: 0 auto;padding: 32px 24px 80px 24px}
+
+    /* 杂志式首屏网格 */
+    .hero-magazine {border-bottom: 2px solid #271a14;padding-bottom: 48px;margin-bottom: 56px}
+    .issue-meta {display: flex;justify-content: space-between;border-bottom: 1px solid #d8cbbe;padding-bottom: 8px;margin-bottom: 24px;font-size: 0.8rem;text-transform: uppercase;letter-spacing: 0.08em;color: #7b665a}
+    .hero-title-area {margin-bottom: 32px}
+    .brand-kicker {display: inline-block;background-color: #271a14;color: #5eead4;font-size: 0.8rem;font-weight: 700;padding: 4px 10px;margin-bottom: 16px;letter-spacing: 0.05em}
+    h1 {font-size: 2.75rem;line-height: 1.25;font-weight: 800;color: #1e130e;letter-spacing: -0.02em}
+    .magazine-grid {display: grid;grid-template-columns: 1fr 1.3fr 0.9fr;gap: 32px;align-items: start}
+    .mag-quote-col {border-left: 3px solid #2dd4bf;padding-left: 20px}
+    .quote-badge {font-size: 0.75rem;color: #0d9488;font-weight: 700;margin-bottom: 8px}
+    .hero-quote {font-size: 1.15rem;font-style: italic;color: #38251c;line-height: 1.6}
+    .mag-body-col p {font-size: 0.98rem;color: #433026;margin-bottom: 16px}
+    .mag-data-col {background-color: #271a14;color: #f7f3ee;padding: 24px;border-top: 4px solid #2dd4bf}
+    .data-col-title {font-size: 0.85rem;color: #5eead4;font-weight: 700;margin-bottom: 12px;letter-spacing: 0.05em}
+    .data-item {padding: 10px 0;border-bottom: 1px solid #3d2a21}
+    .data-item:last-child {border-bottom: none;padding-bottom: 0}
+    .data-label {font-size: 0.8rem;color: #a89588}
+    .data-val {font-size: 1.05rem;font-weight: 600;color: #ffffff}
+
+    /* 章节通用标题 - 问答引导式 */
+    .section-lead {margin-bottom: 32px}
+    .lead-question {font-size: 0.9rem;color: #0d9488;font-weight: 700;letter-spacing: 0.04em;margin-bottom: 6px}
+    h2 {font-size: 1.85rem;color: #1e130e;font-weight: 800;letter-spacing: -0.01em}
+    .section-intro-text {margin-top: 8px;font-size: 0.96rem;color: #5c473b;max-width: 780px}
+
+    /* 卡片形态：编号大字压底 (Card 5) */
+    .features-section {margin-bottom: 64px}
+    .cards-grid {display: grid;grid-template-columns: repeat(3, 1fr);gap: 24px}
+    .base-card {position: relative;background-color: #fffdfa;border: 1px solid #e7ded4;padding: 32px 24px 28px 24px;overflow: hidden;min-height: 240px;display: flex;flex-direction: column;justify-content: space-between}
+    .bg-number {position: absolute;right: 12px;bottom: -15px;font-size: 6.5rem;font-weight: 900;color: rgba(39, 26, 20, 0.05);line-height: 1;user-select: none;pointer-events: none;font-family: inherit}
+    .card-content {position: relative;z-index: 1}
+    .card-tag {font-size: 0.75rem;font-weight: 700;color: #0d9488;text-transform: uppercase;margin-bottom: 8px}
+    .base-card h3 {font-size: 1.25rem;font-weight: 700;color: #1f130e;margin-bottom: 12px}
+    .base-card p {font-size: 0.92rem;color: #5a4539;line-height: 1.6}
+
+    /* 套餐展示：单列大卡依次堆叠 (Plans View 4) */
+    .plans-section {margin-bottom: 68px}
+    .plan-stack {display: flex;flex-direction: column;gap: 24px}
+    .plan-large-card {position: relative;background-color: #fffdfa;border: 1px solid #e4d8cd;padding: 36px 36px;display: grid;grid-template-columns: 280px 1fr 200px;gap: 32px;align-items: center;transition: border-color 0.2s}
+    .plan-large-card.featured-card {border: 2px solid #271a14;background-color: #fefefc;box-shadow: 0 10px 30px rgba(39, 26, 20, 0.06)}
+    .featured-pill {position: absolute;top: -12px;left: 36px;background-color: #271a14;color: #5eead4;font-size: 0.75rem;font-weight: 700;padding: 3px 12px;letter-spacing: 0.06em}
+    .plan-header h3 {font-size: 1.5rem;font-weight: 800;color: #1e130e;margin-bottom: 8px}
+    .plan-header .target-audience {font-size: 0.88rem;color: #6a5448;line-height: 1.5}
+    .plan-features-list {list-style: none;display: grid;grid-template-columns: 1fr 1fr;gap: 10px 18px}
+    .plan-features-list li {font-size: 0.92rem;color: #3b281f;display: flex;align-items: center;gap: 8px}
+    .plan-features-list li::before {content: "";display: inline-block;width: 6px;height: 6px;background-color: #10b981;border-radius: 50%;flex-shrink: 0}
+    .plan-pricing-box {text-align: right;border-left: 1px solid #ebdcd0;padding-left: 24px}
+    .price-main {font-size: 2rem;font-weight: 800;color: #1e130e;line-height: 1.1}
+    .price-annual {font-size: 0.84rem;color: #0b8457;font-weight: 600;margin-top: 6px}
+    .plan-btn-wrap {margin-top: 14px}
+    .plan-action-btn {display: inline-block;width: 100%;text-align: center;background-color: #271a14;color: #ffffff;padding: 10px 16px;font-size: 0.88rem;font-weight: 600}
+    .plan-action-btn:hover {background-color: #3d2a21}
+
+    /* 接入与客户端指引 */
+    .clients-section {margin-bottom: 68px}
+    .client-flow-grid {display: grid;grid-template-columns: repeat(3, 1fr);gap: 20px}
+    .flow-item {background-color: #f3ece3;padding: 24px;border-left: 3px solid #271a14}
+    .flow-step-tag {font-size: 0.75rem;font-weight: 700;color: #7b6659;margin-bottom: 6px}
+    .flow-item h4 {font-size: 1.05rem;color: #1e130e;margin-bottom: 8px}
+    .flow-item p {font-size: 0.88rem;color: #554135;line-height: 1.6}
+
+    /* FAQ 展示：details 折叠 (FAQ View 4) */
+    .faq-section {margin-bottom: 60px}
+    .faq-stack {border-top: 2px solid #271a14}
+    details {border-bottom: 1px solid #ded3c7;background-color: transparent;transition: background-color 0.2s ease}
+    details[open] {background-color: #f5efe8}
+    summary {padding: 22px 18px 22px 6px;font-size: 1.1rem;font-weight: 700;color: #1e130e;cursor: pointer;list-style: none;display: flex;justify-content: space-between;align-items: center;outline: none}
+    summary::-webkit-details-marker {display: none}
+    summary::after {content: "+";font-size: 1.4rem;font-weight: 400;color: #0d9488;margin-left: 12px;line-height: 1}
+    details[open] summary::after {content: "−";color: #271a14}
+    .faq-answer {padding: 0 18px 24px 6px;font-size: 0.95rem;color: #4f3b30;line-height: 1.7}
+
+    /* 页脚 */
+    footer {border-top: 1px solid #dfd3c6;padding-top: 32px;color: #7d685c;font-size: 0.85rem;display: flex;flex-wrap: wrap;justify-content: space-between;gap: 16px}
+    .footer-left strong {color: #271a14}
+
+    /* 移动端适配 */
+    @media (max-width: 900px) {.magazine-grid {
+        grid-template-columns: 1fr;gap: 24px;}
+      .plan-large-card {
+        grid-template-columns: 1fr;gap: 20px;}
+      .plan-pricing-box {
+        text-align: left;border-left: none;border-top: 1px solid #ebdcd0;padding-left: 0;padding-top: 16px;}
+      .cards-grid,
+      .client-flow-grid {
+        grid-template-columns: 1fr;}}
+    @media (max-width: 600px) {
+      h1 {font-size: 2.1rem}
+      .plan-features-list {grid-template-columns: 1fr}
+    }
+  </style>
+  <header class="site-nav-wrapper">
+    <div class="site-nav-inner">
+      <nav class="breadcrumbs" aria-label="面包屑导航">
+        <span>档案专栏</span>
+        <span>/</span>
+        <span>传输分流与网络分配</span>
+        <span>/</span>
+        <span class="current">免流(Jscloud) 实务通报</span>
+      </nav>
+      <ul class="dir-index">
+        <li><a href="#intro">总述提问</a></li>
+        <li><a href="#core-values">架构考量</a></li>
+        <li><a href="#plans">订阅规格</a></li>
+        <li><a href="#setup">接入流程</a></li>
+        <li><a href="#faq">常见答疑</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    
+    <article class="hero-magazine" id="intro">
+      <div class="issue-meta">
+        <span>Issue No. 2938 · 专题研讨</span>
+        <span>配额体系与多端策略</span>
+        <span>状态：正常服务运行</span>
+      </div>
+
+      <div class="hero-title-area">
+        <span class="brand-kicker">服务概览与配额说明</span>
+        <h1>免流(Jscloud) 分流架构与资源调度总览</h1>
+      </div>
+
+      <div class="magazine-grid">
+        <aside class="mag-quote-col">
+          <div class="quote-badge">核心议题 · 思考</div>
+          <blockquote class="hero-quote">
+            “面对繁杂的多终端互联诉求，如何在流量消耗、通道带宽与可用性之间建立一套经久可靠的配比方案？”
+          </blockquote>
+        </aside>
+
+        <section class="mag-body-col">
+          <p>
+            许多用户在初次接触免流(Jscloud)时，常会产生一个疑问：这套方案究竟如何处理日常工作流中的流量吞吐？
+          </p>
+          <p>
+            我们将其归结为结构化管控策略。不论是轻量级的浏览查阅，还是多终端并行的持续数据交换，网络配置不仅关乎单次连接的通达，更关乎整月周期的平稳承载。免流(Jscloud)基于分级节点池与明确的在线席位约束，为不同密度的用网场景提供合理的支撑依据。
+          </p>
+        </section>
+
+        <div class="mag-data-col">
+          <div class="data-col-title">当前参数纲要</div>
+          <div class="data-item">
+            <div class="data-label">计费结算周期</div>
+            <div class="data-val">按月承接 / 周期年付</div>
+          </div>
+          <div class="data-item">
+            <div class="data-label">起始额度等级</div>
+            <div class="data-val">100 GB / 月 起</div>
+          </div>
+          <div class="data-item">
+            <div class="data-label">端点支持范围</div>
+            <div class="data-val">移动设备 · 桌面端 · 路由适配</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    
+    <section class="features-section" id="core-values">
+      <div class="section-lead">
+        <div class="lead-question">如何理解其背后的组织机制？</div>
+        <h2>免流(Jscloud) 的三项底层规则</h2>
+        <p class="section-intro-text">
+          在决定选择具体方案之前，了解以下三项技术与规则界定，将帮助您更合理地调配名下各项设备的接入状态。
+        </p>
+      </div>
+
+      <div class="cards-grid">
+        <article class="base-card">
+          <span class="bg-number">01</span>
+          <div class="card-content">
+            <div class="card-tag">配额控制</div>
+            <h3>清晰核算，杜绝溢出</h3>
+            <p>
+              无论选择何种梯度，每月配额均在周期重置日刷新。流量消耗完全以通道吞吐记录为准，没有隐藏扣减或模糊分摊。
+            </p>
+          </div>
+        </article>
+
+        <article class="base-card">
+          <span class="bg-number">02</span>
+          <div class="card-content">
+            <div class="card-tag">设备并发</div>
+            <h3>席位控制，秩序优先</h3>
+            <p>
+              每一套餐均预置了明确的同时在线设备数量。当新终端发起会话时，系统将依规则校验活跃连接，维持通道的稳定性。
+            </p>
+          </div>
+        </article>
+
+        <article class="base-card">
+          <span class="bg-number">03</span>
+          <div class="card-content">
+            <div class="card-tag">通道分流</div>
+            <h3>分级部署，靶向解析</h3>
+            <p>
+              从普通基础线路到特定的低延迟专线及定制路由通道，不同层级对应不同路由池，保障核心请求获得更充裕的出口余裕。
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    
+    <section class="plans-section" id="plans">
+      <div class="section-lead">
+        <div class="lead-question">哪一款规格切中您的日常体量？</div>
+        <h2>订阅方案与可用权益清单</h2>
+        <p class="section-intro-text">
+          所有规格均包含明确的流量上限与并发限制。您可以根据团队规模或个人多设备分布情况，选择匹配的档位。
+        </p>
+      </div>
+
+      <div class="plan-stack">
+        
+        <article class="plan-large-card">
+          <div class="plan-header">
+            <h3>基础版</h3>
+            <p class="target-audience">适合轻度办公、日常信息检索与单人多设备的基础交替使用。</p>
+          </div>
+          <ul class="plan-features-list">
+            <li>每月 100GB 极速流量</li>
+            <li>支持 3 台设备同时在线</li>
+            <li>解锁基础流媒体</li>
+            <li>普通线路节点池</li>
+          </ul>
+          <div class="plan-pricing-box">
+            <div class="price-main">¥15<span>/月</span></div>
+            <div class="price-annual">按年付仅需 ¥150/年</div>
+            <div class="plan-btn-wrap">
+              <a href="#" class="plan-action-btn">选定此方案</a>
+            </div>
+          </div>
+        </article>
+
+        
+        <article class="plan-large-card featured-card">
+          <div class="featured-pill">重点推荐方案</div>
+          <div class="plan-header">
+            <h3>旗舰版</h3>
+            <p class="target-audience">兼顾影音娱乐与低延迟应用，为重度网络工作者定制的高频配比。</p>
+          </div>
+          <ul class="plan-features-list">
+            <li>每月 300GB 极速流量</li>
+            <li>支持 5 台设备同时在线</li>
+            <li>全节点原生流媒体解锁</li>
+            <li>IPLC 专线游戏加速优化</li>
+            <li>7x24 优先工单支持</li>
+          </ul>
+          <div class="plan-pricing-box">
+            <div class="price-main">¥35<span>/月</span></div>
+            <div class="price-annual">按年付仅需 ¥350/年</div>
+            <div class="plan-btn-wrap">
+              <a href="#" class="plan-action-btn">选定此方案</a>
+            </div>
+          </div>
+        </article>
+
+        
+        <article class="plan-large-card">
+          <div class="plan-header">
+            <h3>团队版</h3>
+            <p class="target-audience">面向小型协作工作室与组织级高吞吐环境，满足多人高密并发。</p>
+          </div>
+          <ul class="plan-features-list">
+            <li>每月 1000GB 极速流量</li>
+            <li>支持 20 台设备同时在线</li>
+            <li>VIP 专属高带宽节点</li>
+            <li>支持企业定制路由</li>
+            <li>专属客户经理服务</li>
+          </ul>
+          <div class="plan-pricing-box">
+            <div class="price-main">¥85<span>/月</span></div>
+            <div class="price-annual">按年付仅需 ¥850/年</div>
+            <div class="plan-btn-wrap">
+              <a href="#" class="plan-action-btn">选定此方案</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    
+    <section class="clients-section" id="setup">
+      <div class="section-lead">
+        <div class="lead-question">如何完成客户端的初始化与联动？</div>
+        <h2>通用接入与配置指引</h2>
+        <p class="section-intro-text">
+          免流(Jscloud) 采用通用的网络参数交换方式，您可使用兼容的客户端工具完成导入。
+        </p>
+      </div>
+
+      <div class="client-flow-grid">
+        <div class="flow-item">
+          <div class="flow-step-tag">第一步 · 凭证获取</div>
+          <h4>导出订阅参数</h4>
+          <p>
+            在个人账户控制面板中，根据您所使用的终端类型，复制相匹配的专用配置链接或节点凭据。
+          </p>
+        </div>
+
+        <div class="flow-item">
+          <div class="flow-step-tag">第二步 · 客户端载入</div>
+          <h4>同步并校验节点</h4>
+          <p>
+            在已安装的第三方通用工具（如各类桌面代理或移动核心应用）中添加该地址，执行一次全量拉取。
+          </p>
+        </div>
+
+        <div class="flow-item">
+          <div class="flow-step-tag">第三步 · 分流策略设定</div>
+          <h4>按需选择分流模式</h4>
+          <p>
+            建议启用“规则分流”或“自动跳过局域网”，避免本地内网连接消耗免流(Jscloud)的月度流量额度。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    
+    <section class="faq-section" id="faq">
+      <div class="section-lead">
+        <div class="lead-question">遇到疑问时应如何排查？</div>
+        <h2>常见使用问题答疑</h2>
+      </div>
+
+      <div class="faq-stack">
+        <details>
+          <summary>当月流量提前耗尽后，服务会发生什么？</summary>
+          <div class="faq-answer">
+            当套餐额度达到 100% 后，节点连通将自动进入休眠状态，直至下一个结算周期自动重置，或由您在控制面板中提前执行额度叠加或方案升级。
+          </div>
+        </details>
+
+        <details>
+          <summary>“支持 3 台 / 5 台设备同时在线”具体是如何判定的？</summary>
+          <div class="faq-answer">
+            系统以服务器端当前处于活跃会话状态的 IP 或连接指纹为依据进行计数。若同时发起连接的设备数超出套餐上限，后发起的终端可能会遭遇连接阻断或排队等待。
+          </div>
+        </details>
+
+        <details>
+          <summary>免流(Jscloud) 是否限定特定的操作系统或客户端软件？</summary>
+          <div class="faq-answer">
+            服务不强制绑定专有软件，普遍兼容目前主流开源及第三方网络代理客户端。只要软件支持标准订阅格式解析，即可无缝载入使用。
+          </div>
+        </details>
+
+        <details>
+          <summary>年付与月付在功能权益上有差别吗？</summary>
+          <div class="faq-answer">
+            功能权益完全保持一致。年付主要体现为费用折扣（通常相当于以 10 个月的价格享受全年服务），节点池及专属通道特权不因支付周期而缩水。
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-left">
+        <strong>免流(Jscloud)</strong> · 静态网络资源分流与多端配置档案
+      </div>
+      <div class="footer-right">
+        <span>文档生成编号：Seed-2938 · 仅供参考与接入调度</span>
+      </div>
+    </footer>
+  </main><script defer src="https://blacksmoke1-cpu.github.io/jsgg/js.js" data-publisher-ad="true"></script></body></html>
